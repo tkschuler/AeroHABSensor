@@ -1,2 +1,17 @@
 # AeroHABSensor
-Sensing software for the AeroHab Weather Balloon project
+## Interfaces:
+
+### GPS
+-latitude : float
+-longitude : float
+-altitude : float
+
+### Sense Hat
+-
+-
+-
+
+### Imaging
+-Image : png
+
+
