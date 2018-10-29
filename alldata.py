@@ -17,6 +17,7 @@ myFile = open('data.csv', 'w')
 
 with myFile:
     writer = csv.writer(myFile, delimiter=',',lineterminator='\n',)
+    writer.writerow(["Time,Altitude,Latitude,Longitude,Pitch,Roll,Yaw,Temperature,Humidity,Pressure"])
     while True:
         #writer.writerow(['Hey!'])
         dt = datetime.datetime.now()
@@ -29,6 +30,24 @@ with myFile:
               "Yaw:      {yaw}\n").format(**orientation))
         
         gyroS = ('{pitch},{roll},{yaw}').format(**orientation)
+        
+        if(orientation['pitch'] == 'n/a'):
+            pitch = 'n/a'
+        
+        else:
+            pitch = '{0:.6f}'.format(float(orientation['pitch']))
+        
+        if(orientation['roll'] == 'n/a'):
+            roll = 'n/a'
+        
+        else:
+            roll = '{0:.6f}'.format(float(orientation['roll']))
+        
+        if(orientation['yaw'] == 'n/a'):
+            yaw = 'n/a'
+        
+        else:
+            yaw = '{0:.6f}'.format(float(orientation['yaw']))
         
         temp = '{0:.6f}'.format(sense.temp)
         humi = '{0:.6f}'.format(sense.humidity)
@@ -65,7 +84,7 @@ with myFile:
                     lon = '{0:.6f}'.format(float(data_stream.TPV['lon']))
                 
 
-                writer.writerow([dtstr,data_stream.TPV['alt'],data_stream.TPV['lat'],data_stream.TPV['lon'],gyroS,temp,humi,pres])
+                writer.writerow([dtstr,alt,lat,lon,pitch,roll,yaw,temp,humi,pres])
             else:
                 print colored("No gps data",'red')
             break
@@ -73,6 +92,5 @@ with myFile:
     
     print("-------------------------------------")
     
-
 
 
