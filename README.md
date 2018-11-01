@@ -1,9 +1,7 @@
 [![license](https://img.shields.io/badge/license-LGPL%202.1-blue.svg)](https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html)
-|version status|
+[![license](https://img.shields.io/pypi/pyversions/event-bus-py2.svg)](https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html)
 
 ## AeroHab Sensing
-
-[![license](https://img.shields.io/badge/license-LGPL%202.1-blue.svg)](https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html)
 
 https://img.shields.io/pypi/pyversions/event-bus-py2.svg
 
@@ -22,7 +20,7 @@ The weather balloon has 2 raspberry pi’s working in conjunction. One Pi is ded
 Install the following dependencies to run the program (The following was tested on Ubuntu 12.04 and Raspberry Pi running Raspbian: 
 
 ```
-sudo apt-get install termcolor
+pip install termcolor
 ```
 
 ## Authors
@@ -35,5 +33,3 @@ sudo apt-get install termcolor
 ## Project History
 
 No History yet
-
-.. |version status| image:: https://img.shields.io/pypi/pyversions/event-bus-py2.svg
