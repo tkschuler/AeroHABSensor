@@ -22,8 +22,15 @@ while 1:
         data = s.recv(BUFFER_SIZE)
         print "received data:", data
         time.sleep(1)
-    except KeyboardInterrupt:
-        print "Connection closed"
-        s.send("close")
-        s.close()
-        sys.exit()
+    except (KeyboardInterrupt, socket.error), e:
+        try:
+            s.send("close")
+            s.close()
+            print "Connection closed"
+            sys.exit()
+        except socket.error:
+            s.close()
+            print "Connection closed unexpectedly. Check Server state..."
+            sys.exit()
+
+s.close()
