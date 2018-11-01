@@ -33,4 +33,4 @@ while 1:
             print colored("Connection closed unexpectedly. Check Server state...",'red')
             sys.exit()
 
-s.close()
+s.close() 
