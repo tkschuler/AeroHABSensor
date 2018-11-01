@@ -2,8 +2,11 @@
 [![license](https://img.shields.io/pypi/pyversions/event-bus-py2.svg)](https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html)
 
 ## AeroHab Sensing
+This balloon is designed using specifications by the Global Space Balloon challenge. 
+https://www.balloonchallenge.org/
 
-https://img.shields.io/pypi/pyversions/event-bus-py2.svg
+The project has been sponsored by **The Aerospace Corporation**
+https://aerospace.org/
 
 ## Overview
 
@@ -20,8 +23,15 @@ The weather balloon has 2 raspberry pi’s working in conjunction. One Pi is ded
 Install the following dependencies to run the program (The following was tested on Ubuntu 12.04 and Raspberry Pi running Raspbian: 
 
 ```
-pip install termcolor
+sudo apt-get install sense-hat
+pip install termcolor gps3
 ```
+### Setting up GPS
+This project uses the [Adafruit Ultimate GPS Breakout](Adafruit Ultimate GPS Breakout) in conjunction with a USB to TTL cable to communicate over serial due to the Sense hat requiring all of the Raspberry PI's GPIO pins. 
+
+Adafruit has provided the following tutorial to set up the GPS: https://learn.adafruit.com/adafruit-ultimate-gps-on-the-raspberry-pi/introduction
+
+The [gps3 library](https://pypi.org/project/gps3/) is used for parsing data in real time. 
 
 ## Authors
 
