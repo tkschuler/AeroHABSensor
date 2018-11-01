@@ -1,4 +1,5 @@
-<img src="AerospaceCorpLogo.jpg" align="right" />
+<img src="AerospaceCorpLogo.png" align="right" />
+<img src="GMULogo.png" align="right" />
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Version](https://img.shields.io/pypi/pyversions/event-bus-py2.svg)](https://www.python.org/download/releases/2.7/)
