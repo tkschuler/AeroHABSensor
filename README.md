@@ -1,3 +1,5 @@
+<img src="AerospaceCorpLogo.jpg" align="right" />
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Version](https://img.shields.io/pypi/pyversions/event-bus-py2.svg)](https://www.python.org/download/releases/2.7/)
 
