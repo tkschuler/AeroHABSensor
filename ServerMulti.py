@@ -4,27 +4,28 @@ import socket
 import thread
 from threading import Thread
 import time
-
+import random
+from termcolor import colored
 
 '''This sends data back to clients'''
 def newClient(clientsocket,addr):
     while True:
         msg = clientsocket.recv(1024)
         if msg == 'stabilization':
-            print i, addr
+            print colored("Stabilization data requested.",'white')
             clientsocket.send(str(roll)+","+str(pitch)+","+str(yaw))
         elif msg == 'faultmanagement':
-            print i, addr
+            print "Fault Management data requested."
             clientsocket.send("1010101010,1010101010,101010101")
         elif msg == 'telemetry':
-            print i, addr
+            print colored("Telemetry data requested.","white")
             clientsocket.send("12.44,56.777,12.333,4.555")
         #Close the connection if the client is terminated.
         elif msg == "close":
-            print "Connection", addr, "closed."
+            print colored(("Connection "+ str(addr) + " closed."),"magenta")
             break
         else:
-            print "Unrecognized message request."
+            print colored("Unrecognized message requeset.","red")
     clientsocket.close()
 
 
@@ -35,8 +36,12 @@ def sensorCollection():
     global i, lat, lon, alt, roll, pitch, yaw, time
     while True:
         i+= 1
-        print "..."
-        time.sleep(.5)
+        roll += random.uniform(-10.0,10.0)
+        pitch += random.uniform(-10.0,10.0)
+        yaw += random.uniform(-10.0,10.0)
+        #print "..."
+        print pitch,roll,yaw
+        time.sleep(.1)
 
 
 i = 0
