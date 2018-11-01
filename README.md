@@ -1,5 +1,5 @@
-[![license](https://img.shields.io/badge/license-LGPL%202.1-blue.svg)](https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html)
-[![license](https://img.shields.io/pypi/pyversions/event-bus-py2.svg)](https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Version](https://img.shields.io/pypi/pyversions/event-bus-py2.svg)](https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html)
 
 ## AeroHab Sensing
 This balloon is designed using specifications by the **Global Space Balloon challenge**. 
