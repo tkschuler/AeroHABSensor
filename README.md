@@ -36,6 +36,20 @@ https://learn.adafruit.com/adafruit-ultimate-gps-on-the-raspberry-pi/introductio
 
 The [gps3 library](https://pypi.org/project/gps3/) is used for parsing data in real time. 
 
+### Running the sensing code
+Before the GPS can record data the socket has to be open:
+```
+sudo killall gpsd
+sudo gpsd /dev/ttyUSB0 -F /var/run/gpsd.sock
+```
+
+Next run the main server
+```
+ServerMulti.py
+```
+***NOTE:*** The IP address and port need to match on server and client side
+
+
 ## Authors
 
 * **Tristan Schuler** - *George Mason University* 
@@ -46,3 +60,9 @@ The [gps3 library](https://pypi.org/project/gps3/) is used for parsing data in r
 ## Project History
 
 No History yet
+
+# TODO:
+* Connect Raspberry Pi's over ethernet (Hopefully have wifi still connected)
+* Split main sensing code into 3 seperate files
+* Integrate with other teams: Stablization, Telemetry, Fault Management
+* Does camera data need to be sent to anyone or just recorded?
