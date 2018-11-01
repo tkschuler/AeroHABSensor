@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
 import socket
-import fcntl, os
 import time
 import sys
+from termcolor import colored
 
 TCP_IP = '127.0.0.1'
 #TCP_IP = '10.151.131.32'
@@ -20,17 +20,17 @@ while 1:
     try:
         s.send(MESSAGE)
         data = s.recv(BUFFER_SIZE)
-        print "received data:", data
+        print colored("received data:",'yellow'), data
         time.sleep(1)
     except (KeyboardInterrupt, socket.error), e:
         try:
             s.send("close")
             s.close()
-            print "Connection closed"
+            print colored("Connection closed",'red')
             sys.exit()
         except socket.error:
             s.close()
-            print "Connection closed unexpectedly. Check Server state..."
+            print colored("Connection closed unexpectedly. Check Server state...",'red')
             sys.exit()
 
 s.close()
