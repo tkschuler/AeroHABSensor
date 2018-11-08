@@ -35,7 +35,7 @@ def newClient(clientsocket, addr):
 
         elif msg == 'faultmanagement':
             print "Fault Management data requested."
-            clientsocket.send("hey")
+            clientsocket.send(rollrate + "," + pitchrate + "," + yawrate)
 
         elif msg == 'telemetry':
             print colored("Telemetry data requested.", "white")
@@ -61,6 +61,11 @@ def newClient(clientsocket, addr):
 def sensorCollection():
     # variables must be global for other threads to use
     global i, dt, lat, lon, alt, roll, pitch, yaw, time, temp, humi, pres, everything, ti, ts, oldtime, tf, rollrate, pitchrate, yawrate, oldroll, oldpitch, oldyaw
+    
+    
+    oldpitch = 0
+    oldroll = 0
+    oldyaw = 0
     tf = datetime.time.second
     with myFile:
         writer = csv.writer(myFile, delimiter=',', lineterminator='\n', )
@@ -90,8 +95,6 @@ def sensorCollection():
             else:
                 pitch = '{0:.6f}'.format(float(orientation['pitch']))
 
-            oldpitch = pitch
-
             if (orientation['roll'] == 'n/a'):
                 roll = 'n/a'
 
@@ -99,7 +102,6 @@ def sensorCollection():
             else:
                 roll = '{0:.6f}'.format(float(orientation['roll']))
 
-            oldroll = roll
 
             if (orientation['yaw'] == 'n/a'):
                 yaw = 'n/a'
@@ -107,16 +109,22 @@ def sensorCollection():
             else:
                 yaw = '{0:.6f}'.format(float(orientation['yaw']))
 
+
+            print(ts)
+            print(float(oldroll))
+            print(float(roll))
+
+            rollrate = (float(roll) - float(oldroll))/ts
+            yawrate = (float(yaw) - float(oldyaw)) / ts
+            pitchrate = (float(pitch) - float(oldpitch)) / ts
+
+            oldroll = roll
+            oldpitch = pitch
             oldyaw = yaw
 
-
-            rollrate = (roll - oldroll)/ts
-            yawrate = (yaw - oldyaw) / ts
-            pitchrate = (pitch - oldpitch) / ts
-
-            print(colored(('Roll Rate = ', rollrate, 'cyan'))
-            print(colored(('Pitch Rate = ', pitchrate, 'cyan'))
-            print(colored(('YawRate = ', yawrate, 'cyan'))
+            print(colored(('Roll Rate = '+ str(rollrate)), 'cyan'))
+            print(colored(('Pitch Rate = '+ str(pitchrate)), 'cyan'))
+            print(colored(('YawRate = ' + str(yawrate)), 'cyan'))
 
             temp = '{0:.6f}'.format(sense.temp)
             humi = '{0:.6f}'.format(sense.humidity)
