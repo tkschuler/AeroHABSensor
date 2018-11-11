@@ -11,7 +11,7 @@ TCP_IP = '127.0.0.1'
 #TCP_IP = '10.151.131.32'
 #TCP_IP = 'aerohab.eduroam.gmu.edu'
 
-TCP_PORT = 50000
+TCP_PORT = 50058
 BUFFER_SIZE = 1024
 MESSAGE = "stabilization"
 
@@ -27,7 +27,6 @@ except:
 while 1:
     try:
         s.send(MESSAGE)
-        print MESSAGE
         data = s.recv(BUFFER_SIZE)
         print colored("received data:",'yellow'), data
         time.sleep(1)
