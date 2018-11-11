@@ -57,7 +57,7 @@ def newClient(clientsocket, addr):
     clientsocket.close()
 
 s = socket.socket()  # Create a socket object
-# host = '127.0.0.1' # Get local machine name
+#host = '127.0.0.1' # Get local machine name
 #host = 'aerohab.eduroam.gmu.edu'
 host = '127.0.0.1'
 port = 50000  # Reserve a port for your service.
@@ -78,6 +78,6 @@ sensor.start()
 while True:
     c, addr = s.accept()  # Establish connection with client.
     print 'Got connection from', addr
-    thread.start_new_thread(newClient, (c, addr))
+    thread.start_new_thread(serverthread.newClient, (c, addr,d))
 s.close()
 
