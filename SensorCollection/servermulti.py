@@ -127,10 +127,6 @@ def sensorCollection():
             print(colored(('Pitch Rate = '+ str(pitchrate)), 'cyan'))
             print(colored(('YawRate = ' + str(yawrate)), 'cyan'))
 
-            print(colored('Roll Rate = ', rollrate, 'cyan'))
-            print(colored('Pitch Rate = ', pitchrate, 'cyan'))
-            print(colored('YawRate = ', yawrate, 'cyan'))
-
             temp = '{0:.6f}'.format(sense.temp)
             humi = '{0:.6f}'.format(sense.humidity)
             pres = '{0:.6f}'.format(sense.pressure)
@@ -185,8 +181,9 @@ pitch = 2
 yaw = 3.1
 s = socket.socket()  # Create a socket object
 # host = '127.0.0.1' # Get local machine name
-host = 'aerohab.eduroam.gmu.edu'
-port = 50010  # Reserve a port for your service.
+#host = 'aerohab.eduroam.gmu.edu'
+host = '127.0.0.1'
+port = 50050  # Reserve a port for your service.
 
 print 'Server started!'
 print 'Waiting for clients...'

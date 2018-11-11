@@ -1,9 +1,10 @@
 import datetime
 import csv
 from termcolor import colored
-#from sense_hat import SenseHat
+from sense_hat import SenseHat
 from time import sleep
-#from gps3 import gps3
+import time
+from gps3 import gps3
 
 
 class DataCollection:
@@ -45,9 +46,9 @@ class DataCollection:
             #dtstr = dt.strftime('%H:%M:%S')
             #newtime = time.time()
             self.tf = time.time()
-            self.dt = self.ti - self.tf
+            self.dt = self.tf - self.ti
             self.ti = self.tf
-            print("Time step" + str(self.dtdt))
+            print("Time step " + str(self.dt))
 
             # ddelta = ti - tf
             # print("time delta is " + ddelta)
@@ -58,7 +59,6 @@ class DataCollection:
             print('x: {pitch}, y: {roll}, z: {yaw}'.format(**accel))
             gyroS = ('{pitch},{roll},{yaw}').format(**orientation)
 
-            i += 1
             if (orientation['pitch'] == 'n/a'):
                 self.pitch = 'n/a'
 
@@ -89,10 +89,6 @@ class DataCollection:
             print(colored(('Roll Rate = ' + str(self.rollrate)), 'cyan'))
             print(colored(('Pitch Rate = ' + str(self.pitchrate)), 'cyan'))
             print(colored(('YawRate = ' + str(self.yawrate)), 'cyan'))
-
-            print(colored('Roll Rate = ', self.rollrate, 'cyan'))
-            print(colored('Pitch Rate = ', self.pitchrate, 'cyan'))
-            print(colored('YawRate = ', self.yawrate, 'cyan'))
 
             self.temp = '{0:.6f}'.format(sense.temp)
             self.humi = '{0:.6f}'.format(sense.humidity)
@@ -144,9 +140,9 @@ class DataCollection:
 
 
 
-d = DataCollection("test.csv")
+#d = DataCollection("test.csv")
 #d.createFile()
 #for i in range (0,5):
 #    d.write2File()
 
-d.collectData()
+#d.collectData()
