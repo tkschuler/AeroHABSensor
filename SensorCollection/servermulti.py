@@ -122,9 +122,14 @@ def sensorCollection():
             oldpitch = pitch
             oldyaw = yaw
 
+
             print(colored(('Roll Rate = '+ str(rollrate)), 'cyan'))
             print(colored(('Pitch Rate = '+ str(pitchrate)), 'cyan'))
             print(colored(('YawRate = ' + str(yawrate)), 'cyan'))
+
+            print(colored('Roll Rate = ', rollrate, 'cyan'))
+            print(colored('Pitch Rate = ', pitchrate, 'cyan'))
+            print(colored('YawRate = ', yawrate, 'cyan'))
 
             temp = '{0:.6f}'.format(sense.temp)
             humi = '{0:.6f}'.format(sense.humidity)
