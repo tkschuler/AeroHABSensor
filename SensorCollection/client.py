@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python
 
 import socket
@@ -8,12 +7,11 @@ from termcolor import colored
 
 
 TCP_IP = '127.0.0.1'
-#TCP_IP = '10.151.131.32'
 #TCP_IP = 'aerohab.eduroam.gmu.edu'
 
-TCP_PORT = 50058
+TCP_PORT = 50001
 BUFFER_SIZE = 1024
-MESSAGE = "stabilization"
+MESSAGE = "fm"
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -22,7 +20,6 @@ try:
 except:
     print colored("Connection refused to (" + str(TCP_IP) + "," + str(TCP_PORT) + ").", 'red')
     sys.exit()
-
 
 while 1:
     try:

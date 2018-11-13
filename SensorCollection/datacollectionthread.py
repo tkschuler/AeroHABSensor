@@ -5,30 +5,39 @@ from sense_hat import SenseHat
 from time import sleep
 import time
 from gps3 import gps3
+import sys
 
+'''This file colelcts data from the Sense Hat and GPS module and saves them to local variables.'''
 
 class DataCollection:
     def __init__(self, datacsv):
         self.lat = self.lon = self.alt = 0.0
-        self.roll = self.pitch = self.yaw = self.oldroll = self.oldpitch = self.oldyaw = self.rollrate = self.pitchrate = self.yawrate = 0.0
+        self.roll = self.pitch = self.yaw = self.oldroll = self.oldpitch = self.oldyaw = 0.0
+        self.rollrate = self.pitchrate = self.yawrate = 0.0
         self.temp = self.humi = self.pres = 0.0
         self.ti = self.ts = self.tf = self.dt = 0.0
+        self.timestr = ''
         self.datacsv = datacsv
-        self.f = open(self.datacsv, 'w')
+        self.ON = True
 
     def createFile(self):
-        with open(self.datacsv, 'w'):
-            writer = csv.writer(self.f, delimiter=',', lineterminator='\n', )
-            writer.writerow(["Time","Altitude,Latitude,Longitude,Pitch,Roll,Yaw,Temperature,Humidity,Pressure"])
-        #self.f.close()
+        self.f2 = open(self.datacsv, 'w')
+        header = ",".join(["Time","Altitude","Latitude","Longitude","Pitch","Roll", "Yaw", \
+                             "Pitch Rate","Roll Rate","Yaw Rate","Temperature","Humidity","Pressure"])
+        self.f2.write(header + "\n")
         print self.datacsv + " created."
+        
 
     def write2File(self):
-        with open(self.datacsv, 'w'):
-            writer = csv.writer(self.f, delimiter=',', lineterminator='\n', )
-            writer.writerow(["stuff","stuff2","stuff3"])
-        print "writing"
-
+        try:
+            everything = ",".join([str(self.timestr),str(self.alt),str(self.lat),str(self.lon), \
+                                 str(self.pitch),str(self.roll),str(self.yaw), \
+                                 str(self.pitchrate),str(self.rollrate),str(self.yawrate), \
+                                 str(self.temp),str(self.humi),str(self.pres)])   
+            self.f2.write(everything+ '\n')
+        except:
+            print "Couldn't write to file."
+        print "writing..."
 
     def collectData(self):
         self.tf = datetime.time.second
@@ -40,23 +49,18 @@ class DataCollection:
         sense = SenseHat()
         sense.set_imu_config(True, True, True)
 
-        while True:
-            #dt = datetime.datetime.now()
-            #self.ti = datetime.time.second
-            #dtstr = dt.strftime('%H:%M:%S')
-            #newtime = time.time()
+        self.createFile()
+        
+        supressOutput = False
+
+        while self.ON:
+            '''Collect Sense Hat Data'''
+            timestamp = datetime.datetime.now() #Date + timestamp
+            self.timestr = timestamp.strftime('%H:%M:%S.%f') #pretty format timestamp
             self.tf = time.time()
             self.dt = self.tf - self.ti
             self.ti = self.tf
-            print("Time step " + str(self.dt))
-
-            # ddelta = ti - tf
-            # print("time delta is " + ddelta)
-
             orientation = sense.get_orientation_degrees()
-            accel = sense.get_accelerometer()
-            print(sense.orientation);
-            print('x: {pitch}, y: {roll}, z: {yaw}'.format(**accel))
             gyroS = ('{pitch},{roll},{yaw}').format(**orientation)
 
             if (orientation['pitch'] == 'n/a'):
@@ -86,63 +90,65 @@ class DataCollection:
             self.oldpitch = self.pitch
             self.oldyaw = self.yaw
 
-            print(colored(('Roll Rate = ' + str(self.rollrate)), 'cyan'))
-            print(colored(('Pitch Rate = ' + str(self.pitchrate)), 'cyan'))
-            print(colored(('YawRate = ' + str(self.yawrate)), 'cyan'))
-
             self.temp = '{0:.6f}'.format(sense.temp)
             self.humi = '{0:.6f}'.format(sense.humidity)
             self.pres = '{0:.6f}'.format(sense.pressure)
-            # roll += random.uniform(-10.0,10.0)
-            # pitch += random.uniform(-10.0,10.0)
-            # yaw += random.uniform(-10.0,10.0)
-            # print "..."
-            # print pitch,roll,yaw
-            #print "Time:        " + str(dtstr)
-            print("Temperature: " + self.temp + " C")
-            print("Humidity:    " + self.humi + " rh")
-            print("Pressure:    " + self.pres + " Mb")
-            #print(gyroS)
-            #tf = datetime.time.second
-            time.sleep(.1)
+            
+            #collect GPS Data
             for new_data in gps_socket:
                 if new_data:
+                    #print colored(new_data,"green")
                     data_stream.unpack(new_data)
-                    # print colored("Time:        " + str(dtstr),"green")
-                    print(colored(('Altitude = ', data_stream.TPV['alt']), 'yellow'))
-                    print(colored(('Latitude = ', data_stream.TPV['lat']), 'yellow'))
-                    print(colored(('Longitude = ', data_stream.TPV['lon']), 'yellow'))
-                    # i = 0
                     if (data_stream.TPV['alt'] == 'n/a'):
-                        self.alt = 'n/a'
+                        self.alt = ''
 
                     else:
                         self.alt = '{0:.6f}'.format(float(data_stream.TPV['alt']))
 
                     if (data_stream.TPV['lat'] == 'n/a'):
-                        self.lat = 'n/a'
+                        self.lat = ''
 
                     else:
                         self.lat = '{0:.6f}'.format(float(data_stream.TPV['lat']))
 
                     if (data_stream.TPV['lon'] == 'n/a'):
-                        self.lon = 'n/a'
+                        self.lon = ''
 
                     else:
                         self.lon = '{0:.6f}'.format(float(data_stream.TPV['lon']))
 
-                    #writer.writerow([dtstr, alt, lat, lon, pitch, roll, yaw, temp, humi, pres])
-                    #everyting = "" + dtstr + ", " + alt + ", " + lat + ", " + lon + ", " + pitch + ", " + roll + ", " + yaw + ", " + temp + ", " + humi + ", " + pres
                 else:
                     print colored("No gps data", 'red')
                 break
+            
+            if (supressOutput != True):
+                 print("Time Stamp: " + str(self.timestr))
+                 
+                 print(colored(('Roll: ' + str(self.roll)), 'magenta'))
+                 print(colored(('Pitch: ' + str(self.pitch)), 'magenta'))
+                 print(colored(('Yaw: ' + str(self.yaw)), 'magenta'))
+                 
+                 print(colored(('Roll Rate: ' + str(self.rollrate)), 'cyan'))
+                 print(colored(('Pitch Rate: ' + str(self.pitchrate)), 'cyan'))
+                 print(colored(('YawRate: ' + str(self.yawrate)), 'cyan'))
+                 
+                 print("Temperature: " + self.temp + " C")
+                 print("Humidity:    " + self.humi + " rh")
+                 print("Pressure:    " + self.pres + " Mb")
+                 
+                 print(colored(('Altitude: ', self.alt), 'yellow'))
+                 print(colored(('Latitude: ', self.lat), 'yellow'))
+                 print(colored(('Longitude: ',self.lon), 'yellow'))
+                 
 
+            self.write2File()
+            print self.timestr
+            time.sleep(.1) #currently set to 10 Hz
+        
+        self.f2.close()
+        print self.datacsv + " closed."
 
-
-
+'''Main Loop for testing'''
 #d = DataCollection("test.csv")
 #d.createFile()
-#for i in range (0,5):
-#    d.write2File()
-
 #d.collectData()
