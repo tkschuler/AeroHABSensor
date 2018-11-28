@@ -27,20 +27,28 @@ import datetime
 import csv
 import datacollectionthread
 import serverthread
+import camerathread
 import signal
+import os
+
+#Start GPS
+os.system("sudo gpsd /dev/ttyUSB0 -F /var/run/gpsd.sock:")
+print("GPS socket set up")
 
 gps_socket = gps3.GPSDSocket()
 data_stream = gps3.DataStream()
 gps_socket.connect()
 gps_socket.watch()
 
+
 sense = SenseHat()
 sense.set_imu_config(True, True, True)
 
 #print "Data Collection Activated."
 
-d = datacollectionthread.DataCollection("test.csv")
+d = datacollectionthread.DataCollection("test.csv",True)
 s = serverthread.Server(d)
+c = camerathread.CameraCapture(d)
 
 def signal_handler(sig, frame):
         d.ON = False #Stop Thread
@@ -54,6 +62,10 @@ signal.signal(signal.SIGINT, signal_handler)
 sensor = Thread(target=d.collectData)
 sensor.daemon = True  # Allows you to exit the program with Ctr+c
 sensor.start()
+
+camera = Thread(target=c.capture)
+camera.daemon = True  # Allows you to exit the program with Ctr+c
+camera.start()
 
 s.connect()
 s.listen()

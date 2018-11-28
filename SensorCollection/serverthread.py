@@ -20,12 +20,13 @@ class Server:
         
     def newClient2(self,clientsocket, addr):
         while True:
-            msg = clientsocket.recv(1024)
+            msg = clientsocket.recv(4)
+            print msg
             if msg == 'stabilization':
                 print colored((self.d.timestr + "   Stabilization data requested."), 'green')
                 clientsocket.send(str(self.d.roll) + "," + str(self.d.pitch) + "," + str(self.d.yaw))
 
-            if msg == 'fm':
+            if msg == 'f':
                 print colored((self.d.timestr + "   Fault Management data requested."), 'green')
                 clientsocket.send(str(self.d.rollrate) + "," + str(self.d.pitchrate) + "," + str(self.d.yawrate))
 
@@ -51,7 +52,8 @@ class Server:
     
         self.s = socket.socket()
         host = '127.0.0.1'
-        port = 50001  # Reserve a port for your server.
+       # host = '192.168.1.1'
+        port = 5000  # Reserve a port for your server.
 
         print 'Server started!'
         print 'Waiting for clients...'

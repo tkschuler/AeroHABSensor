@@ -7,21 +7,26 @@ import time
 from gps3 import gps3
 import sys
 
+
 '''This file colelcts data from the Sense Hat and GPS module and saves them to local variables.'''
 
 class DataCollection:
-    def __init__(self, datacsv):
+    def __init__(self, datacsv, supressOutput):
         self.lat = self.lon = self.alt = 0.0
         self.roll = self.pitch = self.yaw = self.oldroll = self.oldpitch = self.oldyaw = 0.0
         self.rollrate = self.pitchrate = self.yawrate = 0.0
         self.temp = self.humi = self.pres = 0.0
         self.ti = self.ts = self.tf = self.dt = 0.0
         self.timestr = ''
+        self.gpstimestr = ''
         self.datacsv = datacsv
         self.ON = True
+        self.supressOutput = supressOutput
 
     def createFile(self):
-        self.f2 = open(self.datacsv, 'w')
+        timestamp = datetime.datetime.now() #Date + timestamp
+        timestr = timestamp.strftime('%Y-%m-%d_%H:%M:%S')
+        self.f2 = open("Data/" + timestr +".csv", 'w')
         header = ",".join(["Time","Altitude","Latitude","Longitude","Pitch","Roll", "Yaw", \
                              "Pitch Rate","Roll Rate","Yaw Rate","Temperature","Humidity","Pressure"])
         self.f2.write(header + "\n")
@@ -51,12 +56,12 @@ class DataCollection:
 
         self.createFile()
         
-        supressOutput = False
 
         while self.ON:
             '''Collect Sense Hat Data'''
             timestamp = datetime.datetime.now() #Date + timestamp
             self.timestr = timestamp.strftime('%H:%M:%S.%f') #pretty format timestamp
+            self.gpstimestr = timestamp.strftime('%H:%M:%S') #pretty format for GPS 
             self.tf = time.time()
             self.dt = self.tf - self.ti
             self.ti = self.tf
@@ -121,7 +126,7 @@ class DataCollection:
                     print colored("No gps data", 'red')
                 break
             
-            if (supressOutput != True):
+            if (self.supressOutput != True):
                  print("Time Stamp: " + str(self.timestr))
                  
                  print(colored(('Roll: ' + str(self.roll)), 'magenta'))
