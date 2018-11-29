@@ -30,6 +30,31 @@ import serverthread
 import camerathread
 import signal
 import os
+import getopt
+import sys
+
+'''Command line Arguments for Sensor Collection'''
+supressOutput = False
+output_file = 'flightdata.csv'
+rate = 1.0 #Default rate is 1 HZ
+
+options, remainder = getopt.gnu_getopt(
+    sys.argv[1:], 'hs:r:o', ['output=', 'debug', 'help=',])
+
+for opt, arg in options:
+    if opt in ('-s', '--supress'):
+        print('Surpressing output.')
+        supressOutput = True
+    elif opt in ('-o', '--output'):
+        print('Data will be recorded to ' + str(arg))
+        output_file = arg
+    elif opt in ('-r','--rate'):
+        print('Setting Sensor collection rate to ' + str(arg) + ' Hz')
+        rate = float(arg)
+    elif opt in ('-h', '--help'):
+        print('TODO: Write argument help section')
+        sys.exit()
+#End Command Line Argument parsing
 
 #Start GPS
 os.system("sudo gpsd /dev/ttyUSB0 -F /var/run/gpsd.sock:")
@@ -46,7 +71,7 @@ sense.set_imu_config(True, True, True)
 
 #print "Data Collection Activated."
 
-d = datacollectionthread.DataCollection("test.csv",True)
+d = datacollectionthread.DataCollection("test.csv",supressOutput, rate)
 s = serverthread.Server(d)
 c = camerathread.CameraCapture(d)
 

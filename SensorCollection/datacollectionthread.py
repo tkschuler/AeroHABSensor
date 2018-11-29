@@ -11,7 +11,8 @@ import sys
 '''This file colelcts data from the Sense Hat and GPS module and saves them to local variables.'''
 
 class DataCollection:
-    def __init__(self, datacsv, supressOutput):
+    def __init__(self, datacsv, supressOutput, rate):
+        self.RATE = rate
         self.lat = self.lon = self.alt = 0.0
         self.roll = self.pitch = self.yaw = self.oldroll = self.oldpitch = self.oldyaw = 0.0
         self.rollrate = self.pitchrate = self.yawrate = 0.0
@@ -148,7 +149,7 @@ class DataCollection:
 
             self.write2File()
             print self.timestr
-            time.sleep(.1) #currently set to 10 Hz
+            time.sleep(1/self.RATE) #currently set to 10 Hz
         
         self.f2.close()
         print self.datacsv + " closed."
