@@ -9,10 +9,12 @@ from threading import Thread
 data packets to multiple clients'''
 
 class Server:
-    def __init__(self,d):
+    def __init__(self,d,port,host):
         self.s = None
         self.c = None
         self.addr = None
+        self.port = port
+        self.host = host
         self.d = d 
         self.msg = "hey"
         self.server = None
@@ -21,16 +23,17 @@ class Server:
     def newClient2(self,clientsocket, addr):
         while True:
             msg = clientsocket.recv(4)
-            print msg
-            if msg == 'stabilization':
+            print colored(msg,"green")
+            if msg == 's':
                 print colored((self.d.timestr + "   Stabilization data requested."), 'green')
                 clientsocket.send(str(self.d.roll) + "," + str(self.d.pitch) + "," + str(self.d.yaw))
 
-            if msg == 'f':
+            elif msg == 'f':
                 print colored((self.d.timestr + "   Fault Management data requested."), 'green')
                 clientsocket.send(str(self.d.rollrate) + "," + str(self.d.pitchrate) + "," + str(self.d.yawrate))
 
-            elif msg == 'telemetry':
+            elif msg == 't':
+                print colored((self.d.timestr + "   Telemetry data requested."), 'green')
                 clientsocket.send(str(self.d.tf) + "," + str(self.d.lat) + "," + str(self.d.lon) + "," + str(self.d.alt) \
                                   + str(self.d.roll) + "," + str(self.d.pitch) + "," + str(self.d.yaw) \
                                   + str(self.d.temp) + "," + str(self.d.pres) + "," + str(self.d.humi))
@@ -51,14 +54,11 @@ class Server:
     def connect(self):
     
         self.s = socket.socket()
-        host = '127.0.0.1'
-       # host = '192.168.1.1'
-        port = 5000  # Reserve a port for your server.
 
         print 'Server started!'
         print 'Waiting for clients...'
 
-        self.s.bind((host, port))  # Bind to the port
+        self.s.bind((self.host, self.port))  # Bind to the port
         self.s.listen(5)  #Wait for client connection, up to 5.
         
     def listen(self):

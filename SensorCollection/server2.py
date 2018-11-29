@@ -37,9 +37,11 @@ import sys
 supressOutput = False
 output_file = 'flightdata.csv'
 rate = 1.0 #Default rate is 1 HZ
+port = 50050
+host = '127.0.0.1' #Default Localhost
 
 options, remainder = getopt.gnu_getopt(
-    sys.argv[1:], 'hs:r:o', ['output=', 'debug', 'help=',])
+    sys.argv[1:], 'hs:r:o', ['output=', 'debug', 'help=','port=', 'host='])
 
 for opt, arg in options:
     if opt in ('-s', '--supress'):
@@ -51,6 +53,12 @@ for opt, arg in options:
     elif opt in ('-r','--rate'):
         print('Setting Sensor collection rate to ' + str(arg) + ' Hz')
         rate = float(arg)
+    elif opt in ('--port'):
+        print('Setting TCP Port to ' + str(arg))
+        port = int(arg)
+    elif opt in ('--host'):
+        print('Setting TCP IP address to ' + arg)
+        host = arg
     elif opt in ('-h', '--help'):
         print('TODO: Write argument help section')
         sys.exit()
@@ -72,7 +80,7 @@ sense.set_imu_config(True, True, True)
 #print "Data Collection Activated."
 
 d = datacollectionthread.DataCollection("test.csv",supressOutput, rate)
-s = serverthread.Server(d)
+s = serverthread.Server(d,port,host)
 c = camerathread.CameraCapture(d)
 
 def signal_handler(sig, frame):
