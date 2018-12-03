@@ -28,6 +28,7 @@ import csv
 import datacollectionthread
 import serverthread
 import camerathread
+import SenseHatLight
 import signal
 import os
 import getopt
@@ -82,6 +83,7 @@ sense.set_imu_config(True, True, True)
 d = datacollectionthread.DataCollection("test.csv",supressOutput, rate)
 s = serverthread.Server(d,port,host)
 c = camerathread.CameraCapture(d)
+l = SenseHatLight.SenseLight(d,s)
 
 def signal_handler(sig, frame):
         d.ON = False #Stop Thread
@@ -99,6 +101,10 @@ sensor.start()
 camera = Thread(target=c.capture)
 camera.daemon = True  # Allows you to exit the program with Ctr+c
 camera.start()
+
+LED = Thread(target=l.LED_STATUS)
+LED.daemon = True  # Allows you to exit the program with Ctr+c
+LED.start()
 
 s.connect()
 s.listen()

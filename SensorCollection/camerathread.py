@@ -25,7 +25,7 @@ class CameraCapture:
             print colored(self.d.lat,"cyan")
             print colored(self.d.lon,"cyan")
             if self.d.lat != '':
-                self.camera.capture('Stills/' + self.d.gpstimestr + '_' +  str(self.d.lat) + "_" + str(self.d.lon) + '.jpg')
+                self.camera.capture('Stills/aero_' + self.d.gpstimestr + '_' +  str(self.d.lat) + "_" + str(self.d.lon) + '.jpg')
             else:
                 self.camera.capture('Stills/' + self.d.gpstimestr + '.jpg')
         self.camera.stop_preview()

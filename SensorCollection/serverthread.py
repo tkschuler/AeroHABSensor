@@ -19,9 +19,11 @@ class Server:
         self.msg = "hey"
         self.server = None
         self.ON = True
+        self.numberOfClients = 0
         
     def newClient2(self,clientsocket, addr):
         while True:
+            print "Number of Clients" , self.numberOfClients
             msg = clientsocket.recv(4)
             print colored(msg,"green")
             if msg == 's':
@@ -50,6 +52,7 @@ class Server:
                 break
 
         clientsocket.close()
+        self.numberOfClients += -1
         
     def connect(self):
     
@@ -67,9 +70,9 @@ class Server:
             try:
                 c,addr = self.s.accept()  # Establish connection with client.
                 print colored(('Got connection from' + str(addr)),"magenta")
+                self.numberOfClients += 1
                 self.server = Thread(target=self.newClient2, args=((c,addr)))
                 self.server.daemon = True
-                print "made it here"
                 self.server.start()
             except:
                 print colored("Socket Error.", "red")
