@@ -30,15 +30,18 @@ class Server:
                 print colored((self.d.timestr + "   Stabilization data requested."), 'green')
                 clientsocket.send(str(self.d.roll) + "," + str(self.d.pitch) + "," + str(self.d.yaw))
 
-            elif msg == 'f':
+            elif msg == "f\n":
                 print colored((self.d.timestr + "   Fault Management data requested."), 'green')
-                clientsocket.send(str(self.d.rollrate) + "," + str(self.d.pitchrate) + "," + str(self.d.yawrate))
+                clientsocket.send(str(self.d.timestr) + "," + str(self.d.alt) + "," + str(self.d.lat) + "," + str(self.d.lon) + ","\
+                                  + str(self.d.pitch) + "," + str(self.d.roll) + "," + str(self.d.yaw) + "," \
+                                  + str(self.d.rollrate) + "," + str(self.d.pitchrate) + "," + str(self.d.yawrate) + ","\
+                                  + str(self.d.temp) + "," + str(self.d.pres) + "," + str(self.d.humi) + "\n")
 
-            elif msg == 't':
+            elif msg == "t\n":
                 print colored((self.d.timestr + "   Telemetry data requested."), 'green')
-                clientsocket.send(str(self.d.tf) + "," + str(self.d.lat) + "," + str(self.d.lon) + "," + str(self.d.alt) \
-                                  + str(self.d.roll) + "," + str(self.d.pitch) + "," + str(self.d.yaw) \
-                                  + str(self.d.temp) + "," + str(self.d.pres) + "," + str(self.d.humi))
+                clientsocket.send(str(self.d.tf) + "," + str(self.d.lat) + "," + str(self.d.lon) + "," + str(self.d.alt) + + "," \
+                                  + str(self.d.pitch) + "," + str(self.d.roll) + "," + str(self.d.yaw) + "," \
+                                  + str(self.d.temp) + "," + str(self.d.pres) + "," + str(self.d.humi) + "\n")
 
 
             # Close the connection if the client is terminated.
